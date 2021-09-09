@@ -1,3 +1,6 @@
+## 2.1.3+1
+基于 https://github.com/CarnegieTechnologies/gallery_saver的库进行修改，去掉了网路下载库，直接传入本地文件的path即可保存
+
 ## 2.1.3
 
 * Example project build fix and .3gpp video type supprted

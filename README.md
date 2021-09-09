@@ -5,6 +5,9 @@ Both images and videos will be visible in Android Gallery and iOS Photos.
 
 NOTE: If you want to save network image or video link, it has to contain 'http/https' prefix.
 
+## 2021.09.09
+基于 https://github.com/CarnegieTechnologies/gallery_saver的库进行修改，去掉了网路下载库，直接传入本地文件的path即可保存
+https://github.com/Super-Bin/gallery_saver,分支master_20210909
 
 ## Installation
 

@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           firstButtonText = 'saving in progress...';
         });
-        GallerySaver.saveImage(recordedImage.path, albumName: albumName)
+        GallerySaver.saveImageForPath(recordedImage.path, albumName: albumName)
             .then((bool success) {
           setState(() {
             firstButtonText = 'image saved!';
@@ -101,37 +101,38 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           secondButtonText = 'saving in progress...';
         });
-        GallerySaver.saveVideo(recordedVideo.path, albumName: albumName)
-            .then((bool success) {
-          setState(() {
-            secondButtonText = 'video saved!';
-          });
-        });
+        // GallerySaver.saveVideo(recordedVideo.path, albumName: albumName)
+        //     .then((bool success) {
+        //   setState(() {
+        //     secondButtonText = 'video saved!';
+        //   });
+        // });
       }
     });
   }
 
   // ignore: unused_element
-  void _saveNetworkVideo() async {
-    String path =
-        'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-    GallerySaver.saveVideo(path, albumName: albumName).then((bool success) {
-      setState(() {
-        print('Video is saved');
-      });
-    });
-  }
+  // void _saveNetworkVideo() async {
+  //   String path =
+  //       'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
+  //   GallerySaver.saveVideo(path, albumName: albumName).then((bool success) {
+  //     setState(() {
+  //       print('Video is saved');
+  //     });
+  //   });
+  // }
 
   // ignore: unused_element
-  void _saveNetworkImage() async {
-    String path =
-        'https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg';
-    GallerySaver.saveImage(path, albumName: albumName).then((bool success) {
-      setState(() {
-        print('Image is saved');
-      });
-    });
-  }
+  // void _saveNetworkImage() async {
+  //   String path =
+  //       'https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg';
+  //   GallerySaver.saveImage(path, albumName: albumName).then((bool success) {
+  //     setState(() {
+  //       print('Image is saved');
+  //     });
+  //   });
+  // }
+
 }
 
 class ScreenshotWidget extends StatefulWidget {
@@ -185,7 +186,7 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
       await capturedFile.writeAsBytes(pngBytes);
       print(capturedFile.path);
 
-      await GallerySaver.saveImage(capturedFile.path).then((value) {
+      await GallerySaver.saveImage(capturedFile).then((value) {
         setState(() {
           screenshotButtonText = 'screenshot saved!';
         });
