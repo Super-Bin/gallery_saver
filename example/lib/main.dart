@@ -78,13 +78,14 @@ class _MyAppState extends State<MyApp> {
   void _takePhoto() async {
     ImagePicker()
         .getImage(source: ImageSource.camera)
-        .then((PickedFile recordedImage) {
+        .then((PickedFile recordedImage) async{
       if (recordedImage != null && recordedImage.path != null) {
         setState(() {
           firstButtonText = 'saving in progress...';
         });
         GallerySaver.saveImageForPath(recordedImage.path, albumName: albumName)
             .then((bool success) {
+              print("保存图片结果 $success");
           setState(() {
             firstButtonText = 'image saved!';
           });
