@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:gallery_saver/files.dart';
@@ -10,6 +11,7 @@ class GallerySaver {
   static const String channelName = 'gallery_saver';
   static const String methodSaveImage = 'saveImage';
   static const String methodSaveVideo = 'saveVideo';
+  static const String methodSaveImageForImageBytes = 'saveImageForImageBytes';
 
   static const String pleaseProvidePath = 'Please provide valid file path.';
   static const String fileIsNotVideo = 'File on path is not a video.';

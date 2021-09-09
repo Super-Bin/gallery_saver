@@ -74,8 +74,10 @@ class GallerySaver internal constructor(private val activity: Activity) :
     }
 
     private fun finishWithSuccess() {
-        pendingResult!!.success(true)
-        pendingResult = null
+        if(pendingResult != null){
+            pendingResult!!.success(true)
+            pendingResult = null
+        }
     }
 
     override fun onRequestPermissionsResult(
