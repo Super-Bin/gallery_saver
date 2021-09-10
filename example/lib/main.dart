@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -60,7 +62,7 @@ class _MyAppState extends State<MyApp> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.white),
                     ),
-                    onPressed: _recordVideo,
+                    onPressed: _networkImage,
                     child: Text(secondButtonText,
                         style: TextStyle(
                             fontSize: textSize, color: Colors.blueGrey)),
@@ -110,6 +112,16 @@ class _MyAppState extends State<MyApp> {
         // });
       }
     });
+  }
+
+  void _networkImage() async {
+    String imageUrl =
+        "https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg";
+    CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
+    File file = await (image.cacheManager ?? DefaultCacheManager())
+        .getSingleFile(imageUrl);
+
+    GallerySaver.saveImage(file);
   }
 
   // ignore: unused_element
