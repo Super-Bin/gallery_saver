@@ -172,28 +172,33 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
       screenshotButtonText = 'saving in progress...';
     });
     try {
-      //extract bytes
-      final RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
-      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      final ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      final Uint8List pngBytes = byteData.buffer.asUint8List();
+      // 需要延迟
+      return new Future.delayed(const Duration(milliseconds: 20), () async {
+        //extract bytes
+        final RenderRepaintBoundary boundary =
+        _globalKey.currentContext.findRenderObject();
+        final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+        final ByteData byteData =
+        await image.toByteData(format: ui.ImageByteFormat.png);
+        final Uint8List pngBytes = byteData.buffer.asUint8List();
 
-      //create file
-      final String dir = (await getApplicationDocumentsDirectory()).path;
-      final String fullPath = '$dir/${DateTime.now().millisecond}.png';
-      File capturedFile = File(fullPath);
-      await capturedFile.writeAsBytes(pngBytes);
-      print(capturedFile.path);
+        //create file
+        final String dir = (await getApplicationDocumentsDirectory()).path;
+        final String fullPath = '$dir/${DateTime.now().millisecond}.png';
+        print("fullPath $fullPath");
+        File capturedFile = File(fullPath);
+        await capturedFile.writeAsBytes(pngBytes);
+        print("capturedFile.path ${capturedFile.path}");
 
-      await GallerySaver.saveImage(capturedFile).then((value) {
-        setState(() {
-          screenshotButtonText = 'screenshot saved!';
+        await GallerySaver.saveImage(capturedFile).then((value) {
+          setState(() {
+            screenshotButtonText = 'screenshot saved!';
+          });
         });
       });
+
     } catch (e) {
-      print(e);
+      print("报错 $e");
     }
   }
 }

@@ -51,18 +51,20 @@ internal object FileUtils {
             source = rotatedBytes
         }
         val albumDir = File(getAlbumFolderPath(folderName, MediaType.image))
-        val imageFilePath = File(albumDir, file.name).absolutePath
+        var fileName = file.name ?: System.currentTimeMillis().toString()
+//        var fileName = System.currentTimeMillis().toString()
+        val imageFilePath = File(albumDir, fileName).absolutePath
 
         val values = ContentValues()
         if (android.os.Build.VERSION.SDK_INT < 29) {
             values.put(MediaStore.Images.ImageColumns.DATA, imageFilePath)
         }
 
-        values.put(MediaStore.Images.Media.TITLE, file.name)
+        values.put(MediaStore.Images.Media.TITLE, fileName)
         values.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
         values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
         values.put(MediaStore.Images.Media.DATE_MODIFIED, System.currentTimeMillis() / 1000)
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, file.name)
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
         values.put(MediaStore.Images.Media.SIZE, file.length())
 
         if (android.os.Build.VERSION.SDK_INT >= 29) {
