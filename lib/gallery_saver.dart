@@ -46,6 +46,7 @@ class GallerySaver {
 
   ///saves image from provided temp path and optional album name in gallery
   static Future<bool?> saveImage(File file, {String? albumName}) async {
+    print("saveImage file.path ${file.path}");
     if(file.path.isEmpty){
       return false;
     }

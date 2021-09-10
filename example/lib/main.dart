@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +29,12 @@ class _MyAppState extends State<MyApp> {
   String secondButtonText = 'Record video';
 
   String albumName = 'Media';
+
+  String imageUrl =
+      "https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=a62e824376d98d1069d40a31113eb807/838ba61ea8d3fd1fc9c7b6853a4e251f94ca5f46.jpg";
+
+  // String imageUrl =
+  //     "https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,18 @@ class _MyAppState extends State<MyApp> {
                   ),
                 )),
                 flex: 1,
-              )
+              ),
+              Flexible(
+                flex: 1,
+                child: SizedBox.expand(
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    progressIndicatorBuilder: (context, str, press) {
+                      return CupertinoActivityIndicator();
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -80,14 +98,14 @@ class _MyAppState extends State<MyApp> {
   void _takePhoto() async {
     ImagePicker()
         .getImage(source: ImageSource.camera)
-        .then((PickedFile recordedImage) async{
+        .then((PickedFile recordedImage) async {
       if (recordedImage != null && recordedImage.path != null) {
         setState(() {
           firstButtonText = 'saving in progress...';
         });
         GallerySaver.saveImageForPath(recordedImage.path, albumName: albumName)
             .then((bool success) {
-              print("保存图片结果 $success");
+          print("保存图片结果 $success");
           setState(() {
             firstButtonText = 'image saved!';
           });
@@ -115,36 +133,37 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _networkImage() async {
-    String imageUrl =
-        "https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg";
+    // String imageUrl =
+    //     "https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg";
     CachedNetworkImage image = CachedNetworkImage(imageUrl: imageUrl);
     File file = await (image.cacheManager ?? DefaultCacheManager())
         .getSingleFile(imageUrl);
 
-    GallerySaver.saveImage(file);
+    bool result = await GallerySaver.saveImage(file);
+    print("保存网络 $result");
   }
 
-  // ignore: unused_element
-  // void _saveNetworkVideo() async {
-  //   String path =
-  //       'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
-  //   GallerySaver.saveVideo(path, albumName: albumName).then((bool success) {
-  //     setState(() {
-  //       print('Video is saved');
-  //     });
-  //   });
-  // }
+// ignore: unused_element
+// void _saveNetworkVideo() async {
+//   String path =
+//       'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
+//   GallerySaver.saveVideo(path, albumName: albumName).then((bool success) {
+//     setState(() {
+//       print('Video is saved');
+//     });
+//   });
+// }
 
-  // ignore: unused_element
-  // void _saveNetworkImage() async {
-  //   String path =
-  //       'https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg';
-  //   GallerySaver.saveImage(path, albumName: albumName).then((bool success) {
-  //     setState(() {
-  //       print('Image is saved');
-  //     });
-  //   });
-  // }
+// ignore: unused_element
+// void _saveNetworkImage() async {
+//   String path =
+//       'https://image.shutterstock.com/image-photo/montreal-canada-july-11-2019-600w-1450023539.jpg';
+//   GallerySaver.saveImage(path, albumName: albumName).then((bool success) {
+//     setState(() {
+//       print('Image is saved');
+//     });
+//   });
+// }
 
 }
 
@@ -188,10 +207,10 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
       return new Future.delayed(const Duration(milliseconds: 20), () async {
         //extract bytes
         final RenderRepaintBoundary boundary =
-        _globalKey.currentContext.findRenderObject();
+            _globalKey.currentContext.findRenderObject();
         final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
         final ByteData byteData =
-        await image.toByteData(format: ui.ImageByteFormat.png);
+            await image.toByteData(format: ui.ImageByteFormat.png);
         final Uint8List pngBytes = byteData.buffer.asUint8List();
 
         //create file
@@ -208,7 +227,6 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
           });
         });
       });
-
     } catch (e) {
       print("报错 $e");
     }
