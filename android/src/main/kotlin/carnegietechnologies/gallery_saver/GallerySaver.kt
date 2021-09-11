@@ -60,22 +60,23 @@ class GallerySaver internal constructor(private val activity: Activity) :
     }
 
     private fun saveMediaFile() {
-        try {
-            GlobalScope.launch(Dispatchers.IO){
-                if (mediaType == MediaType.video) {
-                    FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
-                } else {
-                    FileUtils.insertImage(activity.contentResolver, filePath, albumName)
-                }
-                GlobalScope.launch(Dispatchers.Main){
-                    finishWithSuccess()
-                }
-            }
-        }catch (e: Exception){
-            finishWithFail()
-        }
+        // 方法一：可行
+//        try {
+//            GlobalScope.launch(Dispatchers.IO){
+//                if (mediaType == MediaType.video) {
+//                    FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
+//                } else {
+//                    FileUtils.insertImage(activity.contentResolver, filePath, albumName)
+//                }
+//                GlobalScope.launch(Dispatchers.Main){
+//                    finishWithSuccess()
+//                }
+//            }
+//        }catch (e: Exception){
+//            finishWithFail()
+//        }
 
-        // 也可以直接使用以下方式
+        // 方法二：可行，也可以直接使用以下方式
 //        if (mediaType == MediaType.video) {
 //            FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
 //        } else {
@@ -84,17 +85,18 @@ class GallerySaver internal constructor(private val activity: Activity) :
 //        finishWithSuccess()
 
         // 使用这个方式，不知道为啥在debug没问题，在release会卡线程造成ANR，考虑可能跟success.await()有关
-//        uiScope.launch {
-//            val success = async(Dispatchers.IO) {
-//                if (mediaType == MediaType.video) {
-//                    FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
-//                } else {
-//                    FileUtils.insertImage(activity.contentResolver, filePath, albumName)
-//                }
-//            }
+        uiScope.launch {
+            val success = async(Dispatchers.IO) {
+                if (mediaType == MediaType.video) {
+                    FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
+                } else {
+                    FileUtils.insertImage(activity.contentResolver, filePath, albumName)
+                }
+            }
+            // 但是去掉这句又能正常运行
 //            success.await()
-//            finishWithSuccess()
-//        }
+            finishWithSuccess()
+        }
     }
 
     private fun finishWithSuccess() {
