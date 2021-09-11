@@ -1,4 +1,4 @@
-## 2.1.3+3
+## 2.1.3+4
 基于 https://github.com/CarnegieTechnologies/gallery_saver的库进行修改，去掉了网路下载库，直接传入本地文件的path即可保存
 
 ## 2.1.3

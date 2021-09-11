@@ -60,23 +60,54 @@ class GallerySaver internal constructor(private val activity: Activity) :
     }
 
     private fun saveMediaFile() {
-        uiScope.launch {
-            val success = async(Dispatchers.IO) {
+        try {
+            GlobalScope.launch(Dispatchers.IO){
                 if (mediaType == MediaType.video) {
                     FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
                 } else {
                     FileUtils.insertImage(activity.contentResolver, filePath, albumName)
                 }
+                GlobalScope.launch(Dispatchers.Main){
+                    finishWithSuccess()
+                }
             }
-            success.await()
-            finishWithSuccess()
+        }catch (e: Exception){
+            finishWithFail()
         }
+
+        // 也可以直接使用以下方式
+//        if (mediaType == MediaType.video) {
+//            FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
+//        } else {
+//            FileUtils.insertImage(activity.contentResolver, filePath, albumName)
+//        }
+//        finishWithSuccess()
+
+        // 使用这个方式，不知道为啥在debug没问题，在release会卡线程造成ANR，考虑可能跟success.await()有关
+//        uiScope.launch {
+//            val success = async(Dispatchers.IO) {
+//                if (mediaType == MediaType.video) {
+//                    FileUtils.insertVideo(activity.contentResolver, filePath, albumName)
+//                } else {
+//                    FileUtils.insertImage(activity.contentResolver, filePath, albumName)
+//                }
+//            }
+//            success.await()
+//            finishWithSuccess()
+//        }
     }
 
     private fun finishWithSuccess() {
         if(pendingResult != null){
             pendingResult!!.success(true)
-            pendingResult = null
+//            pendingResult = null
+        }
+    }
+
+    private fun finishWithFail() {
+        if(pendingResult != null){
+            pendingResult!!.success(false)
+//            pendingResult = null
         }
     }
 
