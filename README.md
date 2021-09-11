@@ -9,6 +9,11 @@ NOTE: If you want to save network image or video link, it has to contain 'http/h
 基于 https://github.com/CarnegieTechnologies/gallery_saver的库进行修改，去掉了网路下载库，直接传入本地文件的path即可保存
 https://github.com/Super-Bin/gallery_saver,分支master_20210909
 
+### kotlin混淆配置
+https://github.com/Kotlin/kotlinx.coroutines/blob/master/README.md
+https://juejin.cn/post/6844903922750980104
+
+
 ## Installation
 
 First, add `gallery_saver` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
